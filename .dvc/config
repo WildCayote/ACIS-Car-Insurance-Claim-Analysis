@@ -1,2 +1,5 @@
 ['remote "local"']
     url = D:\KifiyaAIM-Course\Week - 3\dvc_local_remote
+['remote "remote"']
+    url = gdrive://1xXAO7L3MiZkh_AAcItGygH_3mnBXTjVI
+    gdrive_acknowledge_abuse = true
