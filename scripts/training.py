@@ -1,6 +1,11 @@
-import mlflow
+import mlflow, shap
 import mlflow.sklearn
+
 from sklearn.metrics import mean_squared_error, r2_score
+
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.tree import DecisionTreeRegressor
 
 def initialize_mlflow(uri: str, experiment_name: str):
     """
@@ -66,3 +71,29 @@ def train_and_log_model(model, model_name,experiment_id, X_train, y_train, X_tes
         
         # Return metrics and the trained model
         return mse, r2, model
+
+def explain_model_with_shap(model, X_train, X_test):
+    """
+    Use SHAP to explain the predictions of the provided model.
+
+    Args:
+        model (sklearn.base.BaseEstimator): The trained scikit-learn model.
+        X_train (pd.DataFrame or np.ndarray): The training features.
+        X_test (pd.DataFrame or np.ndarray): The test features.
+    """
+    # Initialize SHAP explainer
+    if isinstance(model, (RandomForestRegressor, GradientBoostingRegressor, DecisionTreeRegressor)):
+        explainer = shap.Explainer(model, X_train)
+    elif isinstance(model, LinearRegression):
+        explainer = shap.Explainer(model, X_train)
+    else:
+        raise ValueError("SHAP explainer not available for this model type.")
+    
+    # Compute SHAP values
+    shap_values = explainer(X_test)
+    
+    # Plot SHAP values
+    shap.summary_plot(shap_values, X_test)
+    
+    # Return SHAP values
+    return shap_values
