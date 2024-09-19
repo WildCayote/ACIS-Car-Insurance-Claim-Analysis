@@ -18,7 +18,7 @@ def initialize_mlflow(uri: str, experiment_name: str):
     """
 
     # Initialize MLflow
-    mlflow.set_tracking_uri("mlruns")  # Set up local directory for logging (In this case a directory called test in the same folder as the script)
+    mlflow.set_tracking_uri(uri)  # Set up local directory for logging (In this case a directory called test in the same folder as the script)
     try:
         experiment_id = mlflow.create_experiment(experiment_name)
     except mlflow.exceptions.MlflowException:
